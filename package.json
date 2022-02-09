@@ -1,0 +1,37 @@
+{
+  "dependencies": {
+    "cryptr": "^6.0.2",
+    "dotenv": "^16.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.2",
+    "jquery": "^3.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^4.3.1",
+    "mongoose": "^6.2.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.15",
+    "yarn": "^1.22.17"
+  },
+  "name": "gameshop",
+  "version": "1.0.0",
+  "description": "App for selling game and action",
+  "main": "server.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "nodemon start",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chondrosw/gameshop-web.git"
+  },
+  "keywords": [
+    "gameshop"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chondrosw/gameshop-web/issues"
+  },
+  "homepage": "https://github.com/chondrosw/gameshop-web#readme"
+}
