@@ -3,7 +3,7 @@ const App = Express()
 const PORT = 8000
 const Morgan = require('morgan')
 const Dotenv = require('dotenv')
-const Cors = require('cors')
+const cors = require('cors')
 
 App.set("view engine","ejs")
 App.use(Express.json())

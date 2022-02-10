@@ -8,6 +8,7 @@ const Schema = new Mongoose.Schema({
     ownerProduct:{type:String},
     description:{type:String},
     rating:{type:Number},
+    
 })
 
 Schema.method("toJSON",function(){
