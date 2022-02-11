@@ -16,6 +16,9 @@ Routes.get('/register',function(req,res){
 Routes.get('/register-photo',function(req,res){
     res.render('register-photo')
 })
+Routes.get('/register-photo-success',function(req,res){
+    res.render('register-photo-success')
+})
 //View
 Routes.get('/add-image',function(req,res){
     res.render('addGames');

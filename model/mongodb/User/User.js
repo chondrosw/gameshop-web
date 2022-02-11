@@ -6,9 +6,9 @@ var Schema = new Mongoose.Schema({
     fullname:{type:String},
     email:{type:String},
     money:{type:Number},
-    age:{type:Number},
-    type:{type:String}
-
+    type:{type:String},
+    favorite:{type:String},
+    photo:{type:String}
 })
 
 Schema.method("toJSON",function(){
