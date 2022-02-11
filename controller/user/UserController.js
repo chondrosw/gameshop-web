@@ -34,6 +34,7 @@ exports.Login = async(req,res)=>{
                 username:dataUser.username,
                 fullname:dataUser.fullname,
                 email:dataUser.email,
+                type:"User",
                 tokenType:'Bearer',
                 token:createToken
             }
