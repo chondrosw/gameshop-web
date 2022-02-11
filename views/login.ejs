@@ -63,7 +63,7 @@
                             class="form-control rounded-pill text-lg" aria-describedby="password" placeholder="Enter Your password">
                         </div>
                         <div class="button-group d-flex flex-column mx-auto pt-50">
-                            <a class="btn btn-sign-in fw-medium text-lg text-white rounded-pill mb-16" href="" role="button">Continue to Sign in</a>
+                            <a class="btn btn-sign-in fw-medium text-lg text-white rounded-pill mb-16" href="" role="button" id="sign-in">Continue to Sign in</a>
                             <a class="btn btn-sign-up fw-medium text-lg text-white rounded-pill" href="" role="button"> Sign Up</a>
                         </div>
                     </div>
@@ -80,4 +80,42 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous">
     </script>
+<script>
+    $(document).ready(async function(){
+        $("#sign-in").click(function(){
+            var username = $("#username").val();
+            var password = $("#current-password").val();
+
+            if(username == "" || username == null || password == null || password == ""){
+                alert("Masukkan semua inputannya ya")
+            }else{
+                let formData = {
+                    username:username,
+                    password:password
+                }
+                let config = {
+                    method: "POST",body:JSON.stringify(formData),
+                    headers:{"Content-type":"application/json"}
+                }
+                const getResponse = await fetch('/api/login',config).then(response => response.json()).catch(err => false)
+                if(getResponse.statusCode == 500 || getResponse.statusCode == 400){
+                    alert(getResponse.message)
+                }else{
+                    $.cookie("token",getResponse.results.token,2);
+                    if(getResponse.results.type == "Admin"){
+                        
+                    }else if(getResponse.results.type == "GameSeller"){
+
+                    }else if(getResponse.results.type == "User"){
+                        window.location.href = "/login"
+                    }
+                    
+                }
+                }
+
+            
+
+        })
+    })
+</script>
 </html>

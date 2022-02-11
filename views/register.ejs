@@ -55,18 +55,24 @@
                         aria-describedby="name" placeholder="Enter your name">
                 </div>
                 <div class="pt-30">
+                    <label for="username" class="form-label text-lg fw-medium color-palette-1 mb-10">Username
+                        </label>
+                    <input type="text" class="form-control rounded-pill text-lg" id="username" name="username"
+                        aria-describedby="username" placeholder="Enter your username">
+                </div>
+                <div class="pt-30">
                     <label for="email" class="form-label text-lg fw-medium color-palette-1 mb-10">Email
                         Address</label>
-                    <input type="email" class="form-control rounded-pill text-lg" id="email" name="email"
-                        aria-describedby="email" placeholder="Enter your email address">
+                    <input type="email" class="form-control rounded-pill text-lg" id="current-email" name="current-email"
+                        aria-describedby="current-email" placeholder="Enter your email address">
                 </div>
                 <div class="pt-30">
                     <label for="password" class="form-label text-lg fw-medium color-palette-1 mb-10">Password</label>
-                    <input type="password" class="form-control rounded-pill text-lg" id="password" name="password"
-                        aria-describedby="password" placeholder="Your password">
+                    <input type="password" class="form-control rounded-pill text-lg" id="current-password" name="current-password"
+                        aria-describedby="current-password" placeholder="Your password">
                 </div>
                 <div class="button-group d-flex flex-column mx-auto pt-50">
-                    <a class="btn btn-sign-up fw-medium text-lg text-white rounded-pill mb-16"
+                    <a id="btn-register-continue" class="btn btn-sign-up fw-medium text-lg text-white rounded-pill mb-16"
                         href="#" role="button">Continue</a>
                     <!-- <button type="submit" class="btn btn-sign-up fw-medium text-lg text-white rounded-pill mb-16"
                         role="button">Continue</button> -->
@@ -80,6 +86,48 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous">
+    </script>
+    <script   src="https://code.jquery.com/jquery-3.6.0.js"   integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="   crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src=
+"https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <script>
+        
+        
+        $(document).ready(async function(){
+            $("#btn-register-continue").click(async function(){
+                var username = $("#username").val();
+                var fullname = $("#name").val();
+                var email = $("#current-email").val();
+                var password = $("#current-password").val();
+                if(username == "" || username == null || fullname == "" || fullname == null
+                || email == "" || email == null || password == "" || password == null){
+                    alert("Input tidak boleh kosong")
+                }
+                else{
+                    
+                    let formData = {
+                    username:username,
+                    fullname:fullname,
+                    email:email,
+                    password:password
+                    }
+                let config = {
+                    method: "POST",body:JSON.stringify(formData),
+                    headers:{"Content-type":"application/json"}
+                }
+                const getResponse = await fetch('/api/register',config).then(response => response.json()).catch(err => false)
+                if(getResponse.statusCode == 500 || getResponse.statusCode == 400){
+                    alert(getResponse.message)
+                }else{
+                    $.cookie("token",getResponse.results.token,2);
+                    window.location.href = "/register-photo"
+                }
+                }
+                
+            })
+        })
     </script>
 
 
