@@ -1,0 +1,43 @@
+/* Sign in */
+.sign-in .img-fluid{
+    max-width: 100%;
+    height: auto;
+}
+.sign-in .bg-blue{
+    background-color: lightskyblue;
+}
+
+.sign-in input[type="password"],
+.sign-in input[type="text"]{
+    border: 1px solid palevioletred;
+    padding: 0.75rem 1.625rem;
+    color: gray;
+}
+
+.sign-in input[type="password"]:focus-within,
+.sign-in input[type="text"]:focus-within{
+    color: hotpink;
+}
+.sign-in input[type="password"]::placeholder,
+.sign-in input[type="text"]::placeholder{
+    color: black;
+}
+.sign-in .btn-sign-in{
+    padding: 0.75rem;
+    background-color: hotpink;
+}
+.sign-in .btn-sign-up{
+    padding: 0.75rem;
+    background-color: blueviolet;
+}
+.sign-in .button-group{
+    width: 100%;
+}
+
+@media (min-width:992px) {
+    .sign-in .container,
+    .sign-in input[type="password"],
+    .sing-in input[type="text"]{
+        max-width: 437px;
+    }
+}

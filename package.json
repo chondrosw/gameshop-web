@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "aos": "^2.3.4",
     "bootstrap": "^5.1.3",
     "cors": "^2.8.5",
     "cryptr": "^6.0.2",

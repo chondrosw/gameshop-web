@@ -1,4 +1,4 @@
-*{
+body{
     margin: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
@@ -399,4 +399,21 @@
    .container-xxl{
        max-width: 1420px;
    }
+}
+
+/* Color Palette */
+.color-palette-1{
+    color: #0C145A;
+}
+
+.color-palette-2{
+    color: #7E8CAC;
+}
+
+.color-palette-3{
+    color: #CCD0DD;
+}
+
+.color-palette-4{
+    color: #4D17E2;
 }

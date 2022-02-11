@@ -1,10 +1,11 @@
 const Express = require('express')
 const App = Express()
 const PORT = 8000
+const path = require('path')
 const Morgan = require('morgan')
 const Dotenv = require('dotenv')
 const cors = require('cors')
-
+var dir = path.join(__dirname,'public')
 App.set("view engine","ejs")
 App.use(Express.json())
 App.use(Express.urlencoded({extended:true}))
@@ -15,7 +16,7 @@ ConnectMongoDB()
 App.listen(PORT,function(){
     console.log("Server is running")
 })
-App.use(Express.static('public'))
+App.use(Express.static(dir))
 
 const Routing = require('./routes/routes')
 const {extend} = require('jquery')
