@@ -4,7 +4,6 @@ const Mongoose = require('mongoose');
 const Schema = new Mongoose.Schema({
     nameProduct:{type:String},
     price:{type:Number},
-    quantity:{type:Number},
     ownerProduct:{type:String},
     description:{type:String},
     rating:{type:Number},

@@ -12,12 +12,12 @@ exports.PostImage = async(req,res)=>{
             })
         }
         let imageData = new ImagePost.create({
-            nameProduct:req.name,
-            image:req.file.originalname
+            owner:req.name,
+            image:req.file
         })
         await imageData.save().then(response=>{
             res.send({
-                message:"Uploaded the file successfully" + req.file.originalname,
+                message:"Uploaded the file successfully" + req.file,
                 statusCode:200,
                 result:response
             })
@@ -26,7 +26,7 @@ exports.PostImage = async(req,res)=>{
         
     }catch(err){
         res.send({
-            message:"Could not upload file" + req.file.originalname,
+            message:"Could not upload file" + req.file,
             statusCode:500
         })
     }

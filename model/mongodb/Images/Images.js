@@ -2,8 +2,8 @@ const Mongoose = require('mongoose');
 
 
 const Schema = new Mongoose.Schema({
-    nameProduct:{type:String},
-    image:{type:String}
+    owner:{type:String},
+    imageFile:{type:String}
     
 })
 

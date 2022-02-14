@@ -1,6 +1,7 @@
 const { response } = require('express')
 const Express = require('express')
 const Routes = Express.Router()
+const helperMulter = require('../module/uploadfile')
 const UserController = require('../controller/user/UserController')
 const ImagesController = require('../controller/images/images')
 
@@ -32,7 +33,7 @@ Routes.get('/gamestore',function(req,res){
 
 Routes.post('/api/register',UserController.Create)
 Routes.post('/api/login',UserController.Login)
-Routes.put('/api/user-photo',UserController.UploadPicture)
+Routes.post('/api/user-photo',UserController.UploadPicture)
 Routes.get('/api/getDataUser',UserController.GetDataUser)
 Routes.get('/api/getDataDeveloper',UserController.GetDataDeveloperGame)
 Routes.post('/api/searchDataUser',UserController.SearchDataUser)
@@ -44,6 +45,13 @@ Routes.get('/add-image',function(req,res){
 Routes.get('/error',function(req,res){
     res.render('404-not-found')
 })
-Routes.post('/api/post-image',ImagesController.PostImage)
+Routes.post('/api/post-image',helperMulter,(req,res,next)=>{
+    const file = req.file;
+    console.log(file)
+   if (!file) {
+      return res.status(400).send({ message: 'Please upload a file.' });
+   }
+   return res.send({ message: 'File uploaded successfully.', file });
+})
 
 module.exports = Routes

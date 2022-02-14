@@ -2,10 +2,11 @@ const { response } = require('express')
 const Mongoose = require('mongoose')
 var cookieParser = require('cookie-parser')
 const Usermodel = require('../../model/mongodb/User/User')
+const ImageModel = require('../../model/mongodb/Images/Images')
 const JWT = require('jsonwebtoken')
 const Cryptr = require('cryptr')
 const cryptr = new Cryptr(process.env.SecretKey)
-const RandomString = require('../../module/randomstring')
+const RandomString = require('../../module/randomstring').RandomString
 const JWTModule = require('../../module/checkAuth')
 const Path = require('path')
 exports.Login = async(req,res)=>{
@@ -50,7 +51,7 @@ exports.Login = async(req,res)=>{
 
 exports.Create = async(req,res)=>{
 
-    let{password,username,email,fullname} = req.body
+    let{password,username,email,fullname,type} = req.body
     if(!req.body){
         res.send(400)
     }
@@ -62,7 +63,7 @@ exports.Create = async(req,res)=>{
             statusCode:500
         })
     }else{
-        if(req.body.type == "" || req.body.type == null){
+        if(type == "" || type == null){
             const newUserModel = new Usermodel({
                 username:req.body.username,
                 password:cryptr.encrypt(password),
@@ -103,7 +104,7 @@ exports.Create = async(req,res)=>{
                 password:cryptr.encrypt(req.body.password),
                 fullname:req.body.fullname,
                 email:req.body.email,
-                type:req.body.type,
+                type:type,
                 money:0,
                 photo:""
             })
@@ -115,7 +116,7 @@ exports.Create = async(req,res)=>{
             let dataParsing = {
                 username:req.body.username,
                 fullname:req.body.fullname,
-                type:req.body.type,
+                type:type,
                 tokenType:"Bearer",
                 token:createToken
             }
@@ -186,14 +187,56 @@ exports.GetDataUser = async(req,res)=>{
 }
 exports.UploadPicture = async(req,res)=>{
     let Token = await JWTModule.JWTVerify(req.headers)
-    if (!Token) res.send({ message: `failed to get data, dont have access`, statusCode: 403 })
-    let tokenAuth = req.params
-    console.log(tokenAuth);
-    let resultToken = await JWT.verify(tokenAuth,process.env.SecretKey,function(err,resultToken){
-        if(err) return false
-        if(resultToken) return resultToken
-    })
-    console.log(resultToken)
+    if (!Token){
+        res.send({ message: `failed to get data, dont have access`, statusCode: 403 })
+    }else if(!req.body || !req.files){
+        res.send({
+            message:"Please fill all the fields",
+            statusCode:402
+        })
+    }else if(!req.files.image.mimetype.include("image")){
+        res.send({
+            message:"Invalid image type",
+            statusCode:415
+        })
+    }else{
+        let profilePicture = req.files.image;
+        let newNameImage = RandomString(25) + profilePicture.mimetype.replace("image/",".");
+        let dirName = Path.join(__dirname,"../public/images/"+newNameImage)
+        let pathImage = "http://"+req.get("host")+"/images/"+newNameImage
+
+        profilePicture.mv(dirName + newNameImage,async (err)=>{
+            const image = new ImageModel({
+                owner:Token.username,
+                imageFile:pathImage
+            })
+            await image.save(image).then(  response=>{
+                response =>{
+                    let dataGet =  Usermodel.aggregate([
+                        {
+                            $match:{"username":token.username}
+                        },{
+                            $lookup:{from:'images',localField:'username',foreignField:'owner',as:'imagelist'}
+                        }
+                    ]).then(response => response).catch(err => false)
+                    if(!dataGet) res.sendStatus(500)
+                    else res.send({
+                        message:'Successfull to get data',
+                        statusCode:200,
+                        results:dataGet
+                    })
+                }
+            }).catch(err =>{
+                res.send({
+                    message:"Error Upload photo",
+                    statusCode:400
+                })
+            })
+            
+        })
+    }
+    
+    
 
     // if(!resultToken){
     //     res.send(403)
