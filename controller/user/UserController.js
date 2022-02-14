@@ -6,6 +6,7 @@ const JWT = require('jsonwebtoken')
 const Cryptr = require('cryptr')
 const cryptr = new Cryptr(process.env.SecretKey)
 const RandomString = require('../../module/randomstring')
+const JWTModule = require('../../module/checkAuth')
 const Path = require('path')
 exports.Login = async(req,res)=>{
     let dataUser = await Usermodel.findOne({'username':req.body.username}).then(response=>response).catch(err =>false)
@@ -25,7 +26,7 @@ exports.Login = async(req,res)=>{
        }else{
             
         let createToken = JWT.sign(
-            { UID: dataUser._id, Username: dataUser.username, Email: dataUser.email },
+            {  Username: dataUser.username, Email: dataUser.email },
             process.env.SecretKey,
             { expiresIn: '1h' }
         )
@@ -64,7 +65,7 @@ exports.Create = async(req,res)=>{
         if(req.body.type == "" || req.body.type == null){
             const newUserModel = new Usermodel({
                 username:req.body.username,
-                password:cryptr.encrypt(req.body.password),
+                password:cryptr.encrypt(password),
                 fullname:req.body.fullname,
                 email:req.body.email,
                 type:"User",
@@ -134,9 +135,58 @@ exports.Create = async(req,res)=>{
         
     }
 }
+exports.SearchDataUser = async(req,res)=>{
+    let Token = await JWTModule.JWTVerify(req.headers)
+    if (!Token) res.send({ message: `failed to get data, dont have access`, statusCode: 403 })
+    await Usermodel.find({"username":{$regex:`.*${req.query.search}`}}).then(response=>{
+        res.send({
+            message:'Successfule to search user',
+            statusCode:200,
+            results:response
+        })
+    }).catch(err =>{
+        res.send({
+            message:'Failed to search data',
+            statusCode:500
+        })
+    })
 
+}
+exports.GetDataDeveloperGame =  async(req,res)=>{
+    let Token = await JWTModule.JWTVerify(req.headers)
+    if (!Token) res.send({ message: `failed to get data, dont have access`, statusCode: 403 })
+    await Usermodel.find({"type":"Developer"}).then(response =>{
+        res.send({
+            message:"Successfull to get data user",
+            statusCode:200,
+            results:response
+        })
+    }).catch(err =>{
+        res.send({
+            message:"Failed to get data user",
+            statusCode:500
+        })
+    })
+}
+exports.GetDataUser = async(req,res)=>{
+    let Token = await JWTModule.JWTVerify(req.headers)
+    if (!Token) res.send({ message: `failed to get data, dont have access`, statusCode: 403 })
+    await Usermodel.find({"type":"User"}).then(response =>{
+        res.send({
+            message:"Successfull to get data user",
+            statusCode:200,
+            results:response
+        })
+    }).catch(err =>{
+        res.send({
+            message:"Failed to get data user",
+            statusCode:500
+        })
+    })
+}
 exports.UploadPicture = async(req,res)=>{
-    
+    let Token = await JWTModule.JWTVerify(req.headers)
+    if (!Token) res.send({ message: `failed to get data, dont have access`, statusCode: 403 })
     let tokenAuth = req.params
     console.log(tokenAuth);
     let resultToken = await JWT.verify(tokenAuth,process.env.SecretKey,function(err,resultToken){

@@ -28,7 +28,7 @@
     <section class="sign-in mx-auto">
         <div class="row">
             <div class="col-xxl-5 col-lg-6 my-auto py-lg-0 pt-lg-50 pb-lg-50 pt-30 pb-47 px-0">
-                <form action="">
+                <form action="/api/login" method="POST">
                     <div class="container mx-auto">
                         <div class="pb-50">
                             <a class="navbar-brand" href="">
@@ -106,22 +106,35 @@
                     password:password
                 }
                 let config = {
-                    method: "POST",body:JSON.stringify(formData),
+                    method: 'POST',body:JSON.stringify(formData),
                     headers:{"Content-type":"application/json"}
                 }
-                const getResponse = await fetch('/api/login',config).then(response => response.json()).catch(err => false)
-                console.log(getResponse)
-                if(getResponse.statusCode == 500 || getResponse.statusCode == 400 || getResponse.statusCode == 404){
-                    alert(getResponse.message)
-                }else{
+                let getResponse = await fetch('/api/login',config).then(response => response.json()).then(data=>{
+                    if(data.statusCode == 500 || data.statusCode == 400 || data.statusCode == 404){
+                    alert(data.message)
+                    }else{
                     //$.cookie("token",getResponse.results.token,2);
-                    console.log(getResponse.results)
-                    setCookie("token",getResponse.results,2)
+                        console.log(data.results)
+                    setCookie("token",data.results.token,2)
+                    if(data.results.type == "User"){
+
                         window.location.href = "overview"
+                    }else if(data.results.type == "GameSeller"){
+                        window.location.href = "addGames"
+                    }
                     
                     
+                    
+                
                 }
+                }).catch(err => {
+                    alert("Error your message")
+                })
+                
+            
+                    
                 }
+                
 
             
     })
