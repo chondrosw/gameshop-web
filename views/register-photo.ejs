@@ -94,8 +94,13 @@
         document.getElementById("#btn-create-myaccount").click(function(){
            let imageData = document.querySelector('#avatar').files
            let formData = new FormData();
-           formData.append('photo',imageData[0])
+           formData.append('owner',"");
+           formData.append('imageFiles',imageData[0]);
            let config = {
+               headers:{
+                   authorization:"",
+                   accept:"application-json"
+               },
                method:'PUT',
                body:formData
            }

@@ -45,8 +45,8 @@ Routes.get('/add-image',function(req,res){
 Routes.get('/error',function(req,res){
     res.render('404-not-found')
 })
-Routes.post('/api/post-image',helperMulter,(req,res,next)=>{
-    const file = req.file;
+Routes.post('/api/post-image',helperMulter.single("myFile"),(req,res)=>{
+    const file = req.files;
     console.log(file)
    if (!file) {
       return res.status(400).send({ message: 'Please upload a file.' });

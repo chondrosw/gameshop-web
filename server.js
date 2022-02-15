@@ -18,9 +18,9 @@ Dotenv.config({path:'./config/Config.env'})
 //Connect MongoDB
 const ConnectMongoDB = require('./model/mongodb/Connection')
 ConnectMongoDB()
-App.listen(PORT,function(){
-    console.log("Server is running")
-})
+// App.listen(PORT,function(){
+//     console.log("Server is running")
+// })
 App.use(Express.static(dir))
 
 const Routing = require('./routes/routes')
